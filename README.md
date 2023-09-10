@@ -25,12 +25,11 @@ Note:  Ignore the error message after  "Successfully loaded records" Message. In
 
 *step3*: Start the Application
 ```
-$ docker-compose up
+$ docker-compose up app
 ```
 
 
-
-**Step 2:** Without Docker  and Docker Compose
+**Option 2:** Without Docker  and Docker Compose
 
 *step1*: update .env file with appropriate value to connect to mysql Database
 
@@ -42,4 +41,53 @@ $ npm run load-Tate-collection
 *step3*: Start the Application
 ```
 $ npm run start-dev
+```
+
+#curl Commands to test
+
+**1.  create user**
+```
+curl --location --request POST 'http://localhost:3000/api/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "jb",
+    "age": 37,
+    "location": "fremont"
+}'
+```
+
+**2. Get all Users**
+```
+curl --location --request GET 'http://localhost:3000/api/users'
+```
+
+**3. Get all Arts**
+```
+curl --location --request GET 'http://localhost:3000/api/art'
+```
+
+**4.1. Get a Comment Art** with name only
+```
+curl --location --request POST 'http://localhost:3000/api/art/414/comments' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+   "name": "jb",
+   "content": "first comment 15"
+}'
+```
+
+**4.2. Get a Comment Art** with User id only
+```
+curl --location --request POST 'http://localhost:3000/api/art/1/comments' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+   "user_id": 1,
+   "content": "first comment 15"
+}'
+```
+
+
+**5. Get a individual Art** 
+```
+curl --location --request GET 'http://localhost:3000/api/art/1'
 ```
