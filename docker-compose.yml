@@ -1,0 +1,41 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.1.0
+    container_name: gantri-home-coding-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./data/msql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gantri-db
+  app:
+    build: .
+    image: gantri-home-coding-dev:latest
+    container_name: gantri-home-coding-dev
+    restart: always
+    volumes:
+       - ./src/:/app/src
+       - ./dist/:/app/dist
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    links:
+      - db
+    stdin_open: true
+    tty: true
+  load-Tate-collection:
+    image: gantri-home-coding-dev:latest
+    container_name: load-Tate-collection
+    command: ["bash",  "-c","./wait-for-it.sh --timeout=0 db:3306 && npm run load-Tate-collection"]
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db
+    stdin_open: true
+    tty: true
+ #   env_file:
+  #    - .env
